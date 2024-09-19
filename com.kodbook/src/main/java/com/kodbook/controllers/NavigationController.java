@@ -31,25 +31,49 @@ public class NavigationController {
 		return "signUp";
 	}
 	@GetMapping("/openCreatePost")
-	public String openCreatePost() {
+	public String openCreatePost(HttpSession session) {
+		if(session.getAttribute("username")!= null) {
 		return "createPost";
+		}
+		else
+			return "index";
 	}
 	@GetMapping("/goHome")
-	public String login(Model model)	{
+	public String login(Model model, HttpSession session)	{
+		if(session.getAttribute("username")!= null) {
 			List<Post> allPosts = postService.fetchAllPosts();
 			model.addAttribute("allPosts", allPosts);
 			return "home";
+		}
+		else
+			return "index";
 	}
 	@GetMapping("/openMyProfile")
 	public String openMyProfile(Model model, HttpSession session) {
+		if(session.getAttribute("username")!= null) {
 		String username = (String) session.getAttribute("username");
 		User user = service.getUser(username);
 		model.addAttribute("user", user);
+		
+		List<Post> myPosts= user.getPosts();
+		model.addAttribute("myPosts", myPosts);
 		return "myProfile";
+		}
+		else
+			return "index";
 	}
 	
 	@GetMapping("/openEditProfile")
-	public String openEditProfile() {
+	public String openEditProfile(HttpSession session) {
+		if(session.getAttribute("username")!= null)
 		return "editProfile";
+		else
+			return "index";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "index";
 	}
 }
