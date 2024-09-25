@@ -71,7 +71,7 @@ public class NavigationController {
 			return "index";
 	}
 	
-	@GetMapping("/visitProfile")
+	@PostMapping("/visitProfile")
 	public String visitProfile(@RequestParam String profileName, Model model) {
 	    User user= service.getUser(profileName);
 	    model.addAttribute("user", user);
